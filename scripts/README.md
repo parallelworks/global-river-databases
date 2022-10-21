@@ -243,6 +243,23 @@ wish to rerun this step, I manually added
 tile 1600 to `msnum_in_GLORICH.log` so
 all you need to do is run `step_03_make_tiles.csh`.
 
+# Pipeline
+
+The data processing is documented in the numbered scripts.
+None of the original downloaded data is retained because
+1) it is really big and 2) it takes a long time run the
+processing so it's unlikely to be repeated.  The distilled
+files are saved here.  Below is a brief summary of each step.
+The process is complicated by the fact that the RiverAtlas
+data set is very large so it was tiled so searches for
+co-locating a site can run much faster (i.e. search within
+a 1x1 degree tile instead of a whole contient's file).
+
++ `step_00_select_data.csh`: Pull out just the variables of interest from RiverAtlas and basically save it in the same format.
++ `step_01_make_tile_poly.csh`: Make polygons delineating tile outlines (polygon files not stored here).
++ `step_02_get_msnum.csh` Get the WMO MS numbers for each point in GLORICH and then sort and uniq the list to figure out which tiles we need.
++
+
 # Run times
 
 + step_06_make_database.sh ~17 hours on a single CPU
