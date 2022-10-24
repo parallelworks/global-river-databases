@@ -315,7 +315,7 @@ data (Step 06, from RiverAtlas) and put those data together
 on a single line.
 +`step_09_filter_and_weight.csh`: Apply sanity check filters
 on the merged data.
-+`step_10_remove_duplicates.csh`: Some GLORICH sites have different
++`step_10_avg_dup_sites.csh`: Some GLORICH sites have different
 GL_ID but the same lon, lat.  Any duplicated sites (those with same
 lon, lat) are merged into a single site by averaging their values.
 Since the physical data are same (set by lon, lat lookups) this
