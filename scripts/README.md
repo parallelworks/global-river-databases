@@ -287,7 +287,29 @@ to stream order alongside all the other data. The
 `../RiverAtlas/ties` directory archived here is the result of
 Step 3a, not Step 3.  The intermediate result from Step 3 is not
 retained.
-+ 
++ `step_04_test_database.csh`: Test building the database with a
+small number of data points - use the original WHONDRS summer 2019
+data where there is independent stream order data.  This allows
+for plotting the RiverAtlas co-located stream order versus the
+WHONDRS stream order.
++ `step_05_plot_stream_order.csh`: Compare WHONDRS stream order
+(manual look up from a high resolution data set) to RiverAtlas
+stream order (automated look up from a slightly lower resolution
+data set).  The results are broadly consistent with a distinct
+one unit offset because RiverAtlas is lower resolution, so the
+order 1 reaches in the WHONDRS stream order are not resolved
+while the order 2 reaches in WHONDRS are viewed as order 1
+reaches in RiverAtlas.
++ `step_06_make_database.csh`: for each GLORICH lon,lat point,
+find the closest RiverAtlas reach and store the results in
+`step_06_output.txt`.  The GL_ID will be used to merge this
+co-located data with the GLORICH chemcial data in Step 8.
++`step_07_condense_GLORICH.sh`: for each GLORICH site, find
+representative temp, pH, oxygen, and carbon.  Run a bunch of
+quality control filters to drop huge outliers, etc. This
+step takes raw data from GLORICH's `hydrochemistry.csv` and
+condenses it into `step_07_output.<txt|csv>`.
+
 
 # Run times
 
