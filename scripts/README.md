@@ -246,8 +246,8 @@ all you need to do is run `step_03_make_tiles.csh`.
 # Pipeline
 
 The data processing is documented in the numbered scripts.
-None of the original downloaded data is retained because
-1) it is really big and 2) it takes a long time run the
+None of the original downloaded data is retained 
+because 1) it is really big and 2) it takes a long time run the
 processing so it's unlikely to be repeated.  The distilled
 files are saved here.  Below is a brief summary of each step.
 The process is complicated by the fact that the RiverAtlas
@@ -309,10 +309,34 @@ representative temp, pH, oxygen, and carbon.  Run a bunch of
 quality control filters to drop huge outliers, etc. This
 step takes raw data from GLORICH's `hydrochemistry.csv` and
 condenses it into `step_07_output.<txt|csv>`.
-
++`step_08_final_merge.csh`: For each GLORICH site ID, get
+the chemical data (Step 07, from GLORICH) and the physical
+data (Step 06, from RiverAtlas) and put those data together
+on a single line.
++`step_09_filter_and_weight.csh`: Apply sanity check filters
+on the merged data.
++`step_10_remove_duplicates.csh`: Some GLORICH sites have different
+GL_ID but the same lon, lat.  Any duplicated sites (those with same
+lon, lat) are merged into a single site by averaging their values.
+Since the physical data are same (set by lon, lat lookups) this
+step essentially is only averaging over the chemical data. To verify
+that there are indeed duplicate sites in `step_09_output.csv`, use
+the following command:
+```bash
+ awk -F, '{print $2,$3}' step_09_output.csv | sort -n | uniq -c | awk '{print $1}' | gmt gmtmath STDIN UPPER -Sl =
+```
+(Awk grabs the 2nd and 3rd column using , as a field delimiter,
+then numerically sort the output so identical lon, lat are next
+to each other in the list, then count the number of repeated,
+adjacent lines with uniq, awk extracts just the counts of repeated
+lines, and gmtmath find the maximum number of repeated lines
+(in this case, there is one lon, lat pair repeated 8 times, there
+are 212 sites where lon, lat is repeated once, 21 sites where
+lon, lat is repeated 3x, 4 sites where lon, lat is repeated 4x,
+and 2 sites where lon, lat is repeated 6x.)
 
 # Run times
 
-+ step_06_make_database.sh ~17 hours on a single CPU
++ step_06_make_database.sh ~17 hours on a single CPU (by far the most demanding step - should be parallelized)
 + step_08_final_merge.sh ~10 mins
 + step_09_filter_and_weight.sh 
