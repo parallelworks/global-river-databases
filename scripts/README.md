@@ -66,11 +66,11 @@ because they have different datums referencing the
 lon/lat pairs.  Also, the precision in the .csv file is
 too low to colocate sites to specific reaches.  Unfortunately,
 there is some error in the dataset so that some sites listed
-in the hydrochemistry.csv are listed in the sampling_locations.csv
+in the `hydrochemistry.csv` are listed in the `sampling_locations.csv`
 file but not in the .gmt file that results from the operation
 below.  I had to choose between using all sites at low precision
 (x,y from sampling_locations.csv) or only ~90% of sites at
-high precision (x,y from Sampling_Locations_v1.gmt).  I picked
+high precision (x,y from `Sampling_Locations_v1.gmt`).  I picked
 the latter b/c of the need to colocate reach-by-reach to
 stream order. So convert that data with ogr2ogr as well.
 Use this line:
@@ -105,7 +105,7 @@ the rest of the GLORICH dataset.
 
 ## Manual changes
 
-The catchment_properties.csv file can be used as is and
+The `catchment_properties.csv` file can be used as is and
 there is no need to go back the .shp because I can look
 up by site ID.  For this file, manually created columns
 to find mean and seasonal cycle amplitude of runoff,
@@ -255,10 +255,39 @@ data set is very large so it was tiled so searches for
 co-locating a site can run much faster (i.e. search within
 a 1x1 degree tile instead of a whole contient's file).
 
-+ `step_00_select_data.csh`: Pull out just the variables of interest from RiverAtlas and basically save it in the same format.
-+ `step_01_make_tile_poly.csh`: Make polygons delineating tile outlines (polygon files not stored here).
-+ `step_02_get_msnum.csh` Get the WMO MS numbers for each point in GLORICH and then sort and uniq the list to figure out which tiles we need.
-+
++ `step_00_select_data.csh`: Pull out just the variables of
+interest from RiverAtlas and basically save it in the same format.
+The list of compressed intermediate file output is below, each
+file is clearly too large for pushing to GitHub.
+207M RiverATLAS_v10_af.xyz.gz
+ 42M RiverATLAS_v10_ar.xyz.gz
+208M RiverATLAS_v10_as.xyz.gz
+107M RiverATLAS_v10_au.xyz.gz
+141M RiverATLAS_v10_eu.xyz.gz
+145M RiverATLAS_v10_na.xyz.gz
+140M RiverATLAS_v10_sa_north.xyz.gz
+ 71M RiverATLAS_v10_sa_south.xyz.gz
+ 94M RiverATLAS_v10_si.xyz.gz
++ `step_01_make_tile_poly.csh`: Make polygons delineating
+tile outlines (polygon files not stored here).
++ `step_02_get_msnum.csh`: Get the WMO MS numbers for each
+point in GLORICH and then sort and uniq the list to figure
+out which tiles we need.
++ `step_03_make_tiles.csh`: Use the list of polygons from Step 02
+(polygons created in Step 01) to sort the reformatted data from
+Step 00 into small tiles that will be faster to search through
+than the larger files.  These smaller files can also be archived
+on GitHub.
++ `step_03a_add_Z.csh`: Add `-Z <stream_order>` flag to each segment
+in the .xyz tile files.  This is useful for plotting. The resulting
+data are the same, just with stream order duplicated and the second
+instance of that data is more prominent.  This step is optional
+since further processing (aside from plotting) would have access
+to stream order alongside all the other data. The
+`../RiverAtlas/ties` directory archived here is the result of
+Step 3a, not Step 3.  The intermediate result from Step 3 is not
+retained.
++ 
 
 # Run times
 
