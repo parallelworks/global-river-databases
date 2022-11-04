@@ -41,6 +41,9 @@ awk '{print $2,$3}' tmp.cxy > tmp.xy
 awk '{print $1}' tmp.cxy > tmp.c
 rm -f tmp.cxy
 
+num_uniq=$(wc -l tmp.xy)
+echo Found $num_uniq unique sites.
+
 # Sort the list based on just x and y
 # For each line in the uniq list of x,y, search for
 # all xy in the main list and spit out the average
@@ -48,7 +51,11 @@ rm -f tmp.cxy
 # because otherwise minus signs in the numbers are
 # interpreted as - for option flags.
 echo Finding means...
-awk -v file=$input_xyz_tmp '{cmd = "grep -e "$1" "file" | grep -e "$2" | gmt gmtmath -Ca STDIN MEAN -Sl ="; cmd | getline myline; print myline}' tmp.xy > means.xyz.tmp
+# This line will average over GLORICH IDs!
+#awk -v file=$input_xyz_tmp '{cmd = "grep -e "$1" "file" | grep -e "$2" | gmt gmtmath -Ca STDIN MEAN -Sl ="; cmd | getline myline; print myline}' tmp.xy > means.xyz.tmp
+# Use implicit behavior of gmtmath to not average over the "time" column (first column)
+# when not specifying average over all columns (remove -Ca) to preserve the ID in first column.
+awk -v file=$input_xyz_tmp '{cmd = "grep -e "$1" "file" | grep -e "$2" | gmt gmtmath STDIN MEAN -Sl ="; cmd | getline myline; print myline}' tmp.xy > means.xyz.tmp
 
 #============================================================
 # I tested with standard deviations
