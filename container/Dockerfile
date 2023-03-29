@@ -2,7 +2,7 @@
 # Use official Ubuntu 18.04 as parent image
 #----------------------------------------
 
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 # Switch to root user since default user
 # in the jupyter container is jovyan.
@@ -15,6 +15,14 @@ WORKDIR /app
 # Add the GMT configuration file
 # provided with this Dockerfile.
 ADD ConfigUser.cmake .
+
+#------------------------------------
+# Configure time zone so apt-get update
+# does not hang.  Thanks to Grigor Khachatryan at:
+# https://grigorkh.medium.com/fix-tzdata-hangs-docker-image-build-cdb52cc3360d
+
+ENV TZ=America/New_York
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 #----------------------------------------
 # Dependencies from Ubuntu repositories
@@ -37,7 +45,12 @@ RUN apt-get update && apt-get install -y \
     ffmpeg \
     tcsh \
     parallel \
-    libblas-dev
+    libblas-dev \
+    gmt \
+    gmt-dcw \
+    gmt-gshhg \
+    ghostscript \
+    gdal-bin
 
 # For some applications (not mine), GMT
 # will use libgdal, but Ubuntu 18.04
@@ -52,22 +65,22 @@ RUN apt-get update && apt-get install -y \
 # Why from source?  In the past, there were
 # some bugs in the standard GMT builds
 # available with apt-get. ~1GB
-RUN git clone https://github.com/GenericMappingTools/gmt.git; \
-    wget ftp://ftp.soest.hawaii.edu/gshhg/gshhg-gmt-2.3.7.tar.gz; \
-    wget ftp://ftp.soest.hawaii.edu/dcw/dcw-gmt-1.1.4.tar.gz; \
-    mkdir -p /usr/local/src; \
-    tar -xvzf gshhg-gmt-2.3.7.tar.gz; \
-    mv gshhg-gmt-2.3.7 /usr/local/src; \
-    tar -xvzf dcw-gmt-1.1.4.tar.gz; \
-    mv dcw-gmt-1.1.4 /usr/local/src; \
-    mv ConfigUser.cmake /app/gmt/cmake/ConfigUser.cmake; \
-    cd gmt; \
-    mkdir build; \
-    cd build; \
-    cmake ..; \
-    make; \
-    make install; \
-    make clean
+#RUN git clone https://github.com/GenericMappingTools/gmt.git; \
+#    wget ftp://ftp.soest.hawaii.edu/gshhg/gshhg-gmt-2.3.7.tar.gz; \
+#    wget ftp://ftp.soest.hawaii.edu/dcw/dcw-gmt-1.1.4.tar.gz; \
+#    mkdir -p /usr/local/src; \
+#    tar -xvzf gshhg-gmt-2.3.7.tar.gz; \
+#    mv gshhg-gmt-2.3.7 /usr/local/src; \
+#    tar -xvzf dcw-gmt-1.1.4.tar.gz; \
+#    mv dcw-gmt-1.1.4 /usr/local/src; \
+#    mv ConfigUser.cmake /app/gmt/cmake/ConfigUser.cmake; \
+#    cd gmt; \
+#    mkdir build; \
+#    cd build; \
+#    cmake ..; \
+#    make; \
+#    make install; \
+#    make clean
 
 #----------------------------------------
 # Dependencies for hydrobase (Netcdf 3.6.3, **not** Netcdf 4+)
@@ -92,5 +105,4 @@ RUN git clone https://github.com/stefangary/hydrobase2.git; \
     make qc; \
     make install; \
     make install_qc; \
-    make clean; \
     cd ../../
