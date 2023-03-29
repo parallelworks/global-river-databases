@@ -1,8 +1,8 @@
 #----------------------------------------
-# Use official Ubuntu 22.04 as parent image
+# Use official Ubuntu 18.04 as parent image
 #----------------------------------------
 
-FROM ubuntu:latest
+FROM ubuntu:18.04
 
 # Switch to root user since default user
 # in the jupyter container is jovyan.
@@ -19,7 +19,7 @@ ADD ConfigUser.cmake .
 #----------------------------------------
 # Dependencies from Ubuntu repositories
 #----------------------------------------
-RUN add-apt-repository ppa:ubuntugis/ppa && apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y \
     wget \
     apt-utils \
     git-core \
@@ -37,10 +37,7 @@ RUN add-apt-repository ppa:ubuntugis/ppa && apt-get update && apt-get install -y
     ffmpeg \
     tcsh \
     parallel \
-    libblas-dev \
-    libgdal1-dev \
-    gdal-bin \
-    libproj-dev
+    libblas-dev
 
 # For some applications (not mine), GMT
 # will use libgdal, but Ubuntu 18.04
@@ -73,6 +70,27 @@ RUN git clone https://github.com/GenericMappingTools/gmt.git; \
     make clean
 
 #----------------------------------------
-# Done
+# Dependencies for hydrobase (Netcdf 3.6.3, **not** Netcdf 4+)
 #----------------------------------------
-RUN ["echo", "Done building PW GMT!"]
+RUN wget ftp://ftp.unidata.ucar.edu/pub/netcdf/netcdf-3.6.3.tar.gz; \
+    mkdir -p /usr/local/netcdf3; \
+    tar -xvzf netcdf-3.6.3.tar.gz; \
+    cd netcdf-3.6.3/; \
+    ./configure --prefix=/usr/local/netcdf3; \
+    make; \
+    make install; \
+    make clean; \
+    cd ../
+
+#----------------------------------------
+# Download and install Hydrobase2 and 3
+#----------------------------------------
+RUN git clone https://github.com/stefangary/hydrobase2.git; \
+    mkdir -p /usr/local/hb2/bin; \
+    cd hydrobase2/src; \
+    make hydrobase; \
+    make qc; \
+    make install; \
+    make install_qc; \
+    make clean; \
+    cd ../../
