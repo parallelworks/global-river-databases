@@ -21,4 +21,12 @@ if [ $num_compressed -gt 0 ]; then
 fi
 
 # Start Docker container, mount data dir, run colocate
-sudo docker run --rm -v ${ra_data_dir}:/data stefanfgary/socks ls /data
+if [ `sudo systemctl is-active docker` == "active" ]
+then
+    #echo Docker daemon is already started. Do nothing.
+    sleep 1
+else
+    #echo Docker daemon not started. Starting Docker daemon...
+    sudo systemctl start docker
+fi
+sudo docker run --rm -v ${ra_data_dir}:/data -v $(pwd):/work parallelworks/gmt /work/colocate.sh ID-1234 0.00215425132404 41.1354301927
