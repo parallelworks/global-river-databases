@@ -6,8 +6,13 @@
 # mounted in it, and runs the colocation.
 #==================================
 
+# Grab inputs to propagate
+id=$1
+lon=$2
+lat=$3
+
 # Select RiverAtlas data directory
-ra_data_dir=~/RiverAtlas/tiles_compressed
+ra_data_dir=./RiverAtlas/tiles_compressed
 
 # Count number of compressed files
 num_compressed=`ls -1 ${ra_data_dir}/*.gz | wc -l`
@@ -29,4 +34,4 @@ else
     #echo Docker daemon not started. Starting Docker daemon...
     sudo systemctl start docker
 fi
-sudo docker run --rm -v ${ra_data_dir}:/data -v $(pwd):/work parallelworks/gmt /work/colocate.sh ID-1234 0.00215425132404 41.1354301927
+sudo docker run --rm -v ${ra_data_dir}:/data -v $(pwd):/work parallelworks/gmt /work/colocate.sh $id $lon $lat
