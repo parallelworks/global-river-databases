@@ -16,9 +16,10 @@ lat=$3
 ra_data_dir=$(realpath ../RiverAtlas/tiles_compressed)
 
 # Count number of compressed files
-num_compressed=`ls -1 ${ra_data_dir}/*.gz | wc -l`
+#num_compressed=`ls -1 ${ra_data_dir}/*.gz | wc -l`
+#if [ $num_compressed -gt 0 ]; then
 
-if [ $num_compressed -gt 0 ]; then
+if compgen -G "${ra_data_dir}*.gz" > /dev/null; then
     # Compressed files exist, decompress
     workdir=`pwd`
     cd ${ra_data_dir}
