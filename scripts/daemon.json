@@ -1,0 +1,16 @@
+Attempt at specifying different location
+For docker images to be stored - minimizes
+the number of pulls if many containers are
+pulled by worker nodes.
+
+This does not work. Attempt to replace 
+/etc/docker/daemon.json with this snippet.
+Then:
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+based on:
+https://stackoverflow.com/questions/24309526/how-to-change-the-docker-image-installation-directory/34731550#34731550
+{
+    "graph": "/home/docker",
+    "storage-driver": "overlay"
+}
