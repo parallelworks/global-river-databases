@@ -71,12 +71,13 @@ set tmp_match_file = `mktemp -p $PWD XXXXXXXXXX.match.tmp`
 # Search tile files for points within
 # From GMT6 docs: -fg for spherical distances in km and geographical (lon, lat) coordinates
 # From GMT6 docs: default spherical approx with great circles (-jg) using the authalic radius
-# -jf is flat Earth approx -> faster if needed.
+# -jf is flat Earth approx -> faster if needed. Don't see how -jg is added, so leave out
+# for now since default.
 #
 # Works, but depreciated syntax
 #gmt gmtselect $tile_files -C${tmp_xy_file}+d-10k -fg > $tmp_lines_file
 
-gmt gmtselect $tile_files -C${tmp_xy_file}+d10k -fg -jg > $tmp_lines_file
+gmt gmtselect $tile_files -C${tmp_xy_file}+d10k -fg > $tmp_lines_file
 
 # Find closest line to search point
 set xydif = `gmt mapproject ${tmp_xy_file} -L${tmp_lines_file}+p -fg`
