@@ -12,7 +12,8 @@ lon=$2
 lat=$3
 
 # Select RiverAtlas data directory
-ra_data_dir=./RiverAtlas/tiles_compressed
+# Get absolute path for mounting into container
+ra_data_dir=$(realpath ../RiverAtlas/tiles_compressed)
 
 # Count number of compressed files
 num_compressed=`ls -1 ${ra_data_dir}/*.gz | wc -l`
