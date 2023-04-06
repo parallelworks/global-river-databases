@@ -10,6 +10,23 @@
 # of step_06_make_database.
 # See comments therein for 
 # reasoning behind GMT opts/cmds.
+#
+# STDOUT of main output is
+# redirected to colocated.header
+# (if id == "header") or 
+# colocated.XXXXXXXXXX (random
+# text) so the script runs quietly
+# and in parallel across multiple 
+# nodes and mktemp random naming
+# is all handled internally here.
+#
+# It is recommended to run it first
+# in "header mode" once on its own,
+# this will ensure that the data are
+# decompressed and ready to go and
+# there are no clashes with multiple
+# processes attempting to decompress
+# the same files at the same time.
 #============================
 
 # INPUTS
