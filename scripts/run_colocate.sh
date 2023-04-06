@@ -35,4 +35,4 @@ else
     #echo Docker daemon not started. Starting Docker daemon...
     sudo systemctl start docker
 fi
-sudo docker run --rm -v ${ra_data_dir}:/data -v $(pwd):/work parallelworks/gmt /work/colocate.sh $id $lon $lat
+sudo docker run --rm -v ${ra_data_dir}:/data -v $(pwd):/work -w /work parallelworks/gmt /work/colocate.sh $id $lon $lat
