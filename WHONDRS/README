@@ -1,0 +1,5 @@
+This directory contains WHONDRS and ICON-ModEx data.
++ FTICR: subdirectory with processed FTICR data, see LICENSE for source.
++ site-data: subdirectory with additional site data, see LICENSE for source.
++ ICON-ModEx_Data.csv: August-2023 compendium of scaled respiration rates and core site metadata.
+
