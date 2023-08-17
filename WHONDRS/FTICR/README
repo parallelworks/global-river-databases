@@ -1,0 +1,11 @@
+This file details adjustments to downloaded data to streamline
+preprocessing.
+
+# Processed_S19S_Sediments_Water_2-2_newcode.csv
+
+Change the column headers for the sediment data to match the
+Sample_ID. 
+
+```
+sed 's/_Sed_Field_ICR./-/g' Processed_S19S_Sediments_Water_2-2_newcode.csv > Processed_S19S_Sediments_Water_2-2_newcode.csv.adj
+```
