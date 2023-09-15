@@ -8,7 +8,8 @@ continental-scale estimates of river sediment respiration rates archived
 in [dynamic-learning-rivers](https://github.com/parallelworks/dynamic-learning-rivers). 
 The machine learning (ML) workflow to generate these estimates uses the 
 [SuperLearner](https://github.com/parallelworks/sl_core) stacked ensemble 
-of ML models.
+of ML models. Data from the WHONDRS project is also included here to document
+the preprocessing steps necessary for creating a training data set.
 
 The code, in `./scripts`, searches for the closest RiverAtlas data point 
 (physical information about each river segment) for each data point in the 
