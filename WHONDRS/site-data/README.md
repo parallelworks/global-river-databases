@@ -28,13 +28,7 @@ grep -i INC WHONDRS_S19S_Sediment_NPOC.csv | sed 's/_sed_inc_icr//gI' > WHONDRS_
 
 # Get just the Field data, then change Sample_ID
 # Also, some samples out of range, set to max.
- Field WHONDRS_S19S_Sediment_NPOC.csv | sed 's/_sed_field_icr//gI' | sed 's/Above_Range_Greater_Than_22/22/g' > WHONDRS_S19S_Sediment_NPOC_Field.csv.adj 
-```
-
-Get rid of "_Sed_Field_ICR" in the Sample_ID so that
-they match other Sample_IDs. Used this filter:
-```
-sed 's/_Sed_Field_ICR//g' WHONDRS_S19S_Sediment_NPOC.csv > WHONDRS_S19S_Sediment_NPOC.csv.adj
+grep -i Field WHONDRS_S19S_Sediment_NPOC.csv | sed 's/_sed_field_icr//gI' | sed 's/Above_Range_Greater_Than_22/22/g' > WHONDRS_S19S_Sediment_NPOC_Field.csv.adj 
 ```
 
 Also, changed column header variable name from
