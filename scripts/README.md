@@ -19,6 +19,17 @@ I also had to manually add libproj with:
 sudo apt-get install libproj-dev
 ```
 
+Some scripts can be launched with `./gmt_container_wrapper.sh` so that
+the container is started, automatically mounts `$PWD` and executes the
+script in the container. That way users don't need to start the container
+themselves. For example,
+```
+gmt_container_wrapper.sh "step_03b_make_RA_only_predict.sh /data/RiverAtlas/tiles_compressed/RiverATLAS_v10_na.xyz.7411.gz"
+``` 
+Note that the quotes around the script allow for keeping the arguements to 
+the run script (the .gz file) with the text of the run script itself and
+then those get passed to the Docker container, too.
+
 # GLORICH
 
 ## Data source

@@ -17,10 +17,18 @@
 
 # Set input file
 compressed_input=$1
-bn=`basename $compressed_input .gz`
+bn=`basename $compressed_input .gz`.csv
+
+echo Working on $compressed_input
+echo Will write to basename $bn
+
+# Move to container work dir
+cd /work
+
+echo Working in `pwd`
 
 # Decompress it locally
-gunzip -c $compressed_input > ./tmp.xyz
+gunzip -vc $compressed_input > ./tmp.xyz
 
 #===================================================================
 # Convert
@@ -64,4 +72,5 @@ awk '$1 == ">" {OFS=","; dep=$11/(10*$10); xsecta=($11)/$3; print $2,$76,$77,$78
 # Clean up
 rm tmp2.xyz
 rm tmp.xyz
+gzip step_03b_output_${bn}
 
